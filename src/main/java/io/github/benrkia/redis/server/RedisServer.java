@@ -42,15 +42,15 @@ public class RedisServer extends TCPServer {
     public void run() {
 
       try (
-          PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+          PrintWriter out = new PrintWriter(socket.getOutputStream());
           InputStream is = socket.getInputStream();
           BufferedReader in = new BufferedReader(new InputStreamReader(is));) {
 
-        sendFirstPont(out);
-        String line;
-        while ((line = in.readLine()) != null) {
-          // readInputStream(is)
-          run(RESPUtils.toBytes("*1\r\n$4\r\nPING\r\n"), out);
+        String line = in.readLine();
+        while (line != null && line.length() > 0) {
+          out.println(getPong());
+          out.flush();
+          line = in.readLine();
         }
 
         socket.close();
@@ -73,20 +73,21 @@ public class RedisServer extends TCPServer {
       return data;
     }
 
-    private void sendFirstPont(final PrintWriter out) {
+    private String getPong() {
       try {
-        out.println(new Ping().execute());
-      } catch (RESPError ignored) {
+        return new Ping().execute();
+      } catch (RESPError e) {
+        return protocol.error(e);
       }
     }
 
-    private void run(final byte[] data, final PrintWriter out) {
+    private String run(final byte[] data) {
       try {
         String input = RESPUtils.toString(data);
         Cmd cmd = new RESPParser(input).parse();
-        out.println(cmd.execute());
+        return cmd.execute();
       } catch (RESPError error) {
-        out.println(protocol.error(error));
+        return protocol.error(error);
       }
     }
   }
