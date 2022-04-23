@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.Objects;
 
 import io.github.benrkia.redis.cmd.Cmd;
+import io.github.benrkia.redis.cmd.Ping;
 import io.github.benrkia.redis.exception.RESPError;
 import io.github.benrkia.redis.parser.RESPParser;
 import io.github.benrkia.redis.protocol.RESPProtocol;
@@ -42,9 +43,15 @@ public class RedisServer extends TCPServer {
 
       try (
           PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-          InputStream is = socket.getInputStream();) {
+          InputStream is = socket.getInputStream();
+          BufferedReader in = new BufferedReader(new InputStreamReader(is));) {
 
-        run(readInputStream(is), out);
+        sendFirstPont(out);
+        String line;
+        while ((line = in.readLine()) != null) {
+          // readInputStream(is)
+          run(RESPUtils.toBytes("*1\r\n$4\r\nPING\r\n"), out);
+        }
 
         socket.close();
       } catch (IOException ignored) {
@@ -64,6 +71,13 @@ public class RedisServer extends TCPServer {
 
       outputStream.close();
       return data;
+    }
+
+    private void sendFirstPont(final PrintWriter out) {
+      try {
+        out.println(new Ping().execute());
+      } catch (RESPError ignored) {
+      }
     }
 
     private void run(final byte[] data, final PrintWriter out) {

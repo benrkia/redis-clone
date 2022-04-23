@@ -13,8 +13,9 @@ public class Ping extends Cmd {
 
   @Override
   public String execute() {
-    String result = args.length == 1 ? args[0] : "PONG";
-    return protocol.bulkString(result);
+    return args.length == 1
+        ? protocol.bulkString(args[0])
+        : protocol.simpleString("PONG");
   }
 
   @Override
