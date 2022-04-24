@@ -28,10 +28,7 @@ public interface RESPUtils {
   }
 
   static String toString(final byte[] bytes) {
-    return toString(bytes, 0, bytes.length);
+    return new String(bytes, StandardCharsets.UTF_8);
   }
 
-  static String toString(final byte[] bytes, final int offset, final int length) {
-    return new String(bytes, offset, length, StandardCharsets.UTF_8);
-  }
 }
