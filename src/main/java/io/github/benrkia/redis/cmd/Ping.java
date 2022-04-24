@@ -1,14 +1,11 @@
 package io.github.benrkia.redis.cmd;
 
 import io.github.benrkia.redis.exception.InvalidCmdArguments;
-import io.github.benrkia.redis.protocol.RESPProtocol;
 
 public class Ping extends Cmd {
-  private final RESPProtocol protocol;
 
   public Ping(String... args) throws InvalidCmdArguments {
     super(args);
-    this.protocol = new RESPProtocol();
   }
 
   @Override
@@ -22,7 +19,7 @@ public class Ping extends Cmd {
   protected String[] ensureValidArgs(String... args)
       throws InvalidCmdArguments {
     if (args == null || args.length > 1)
-      throw new InvalidCmdArguments("Excpected at most 1 argument");
+      throw new InvalidCmdArguments("wrong number of arguments for 'ping' command");
     return args;
   }
 

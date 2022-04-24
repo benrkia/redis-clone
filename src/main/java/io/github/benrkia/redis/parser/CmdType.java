@@ -3,7 +3,7 @@ package io.github.benrkia.redis.parser;
 import java.util.Objects;
 
 enum CmdType {
-  PING("PING");
+  PING("PING"), ECHO("ECHO");
 
   private final String key;
 

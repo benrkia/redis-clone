@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 import io.github.benrkia.redis.cmd.Cmd;
+import io.github.benrkia.redis.cmd.Echo;
 import io.github.benrkia.redis.cmd.Ping;
 import io.github.benrkia.redis.exception.RESPError;
 import io.github.benrkia.redis.exception.SyntaxError;
@@ -54,6 +55,8 @@ public final class RESPParser implements Closeable {
 
     if (type == CmdType.PING)
       return new Ping(readCmdArgs(tokens));
+    if (type == CmdType.ECHO)
+      return new Echo(readCmdArgs(tokens));
 
     throwUnsupportedCmd();
     return null;
