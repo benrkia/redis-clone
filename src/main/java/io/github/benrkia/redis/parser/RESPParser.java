@@ -68,8 +68,6 @@ public final class RESPParser implements Closeable {
       cmdParts.add(bulkString());
     }
 
-    eatEndOfCmd();
-
     return cmdParts;
   }
 
@@ -97,26 +95,11 @@ public final class RESPParser implements Closeable {
     return value;
   }
 
-  private void eatEndOfCmd() throws SyntaxError {
-    try {
-      eatLF();
-    } catch (SyntaxError e) {
-      eatCRLF();
-    }
-  }
-
   private void eatCRLF() throws SyntaxError {
-    eatCR();
-    eatLF();
-  }
-
-  private void eatCR() throws SyntaxError {
     if (peek() != Constants.CR)
       throwInvalidCmdFormat();
     advance();
-  }
 
-  private void eatLF() throws SyntaxError {
     if (peek() != Constants.LF)
       throwInvalidCmdFormat();
     advance();

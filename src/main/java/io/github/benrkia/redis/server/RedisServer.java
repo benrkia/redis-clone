@@ -1,15 +1,12 @@
 package io.github.benrkia.redis.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Objects;
 
 import io.github.benrkia.redis.cmd.Cmd;
-import io.github.benrkia.redis.cmd.Ping;
 import io.github.benrkia.redis.exception.RESPError;
 import io.github.benrkia.redis.parser.RESPParser;
 import io.github.benrkia.redis.protocol.RESPProtocol;
@@ -60,7 +57,7 @@ public class RedisServer extends TCPServer {
         } catch (RESPError error) {
           result = protocol.error(error);
         }
-        out.println(result);
+        out.print(result);
         out.flush();
       }
     }
