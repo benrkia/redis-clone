@@ -45,7 +45,7 @@ public final class RESPProtocol {
     return sb.toString();
   }
 
-  public String nullBulkString() {
+  public String nil() {
     return BULK_STRING.getCharValue() + "-1" + CRLF;
   }
 
@@ -63,7 +63,7 @@ public final class RESPProtocol {
 
   private String serializeObject(final Object o) {
     if (o == null) {
-      return nullBulkString();
+      return nil();
     }
     if (o instanceof Boolean) {
       return bool((Boolean) o);
